@@ -8,7 +8,7 @@ import SwiftUI
 struct fancywebviewApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            FancyWebView(url: .init(string: "https://google.com")!)
         }
     }
 }
