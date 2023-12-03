@@ -40,24 +40,31 @@ struct WebView: UIViewRepresentable {
     }
 }
 
+
+/// A fancy web view.
+/// - Parameters:
+///     - url: The initial URL to load
+///     - isSheet: Set this to `true` if you intend to present this in a sheet.
 struct FancyWebView: View {
     public var url: URL
+    public var isSheet: Bool = false
     var body: some View {
         ZStack {
             WebView(url: url)
-                
-            TitleBar(url: url)
+            TitleBar(url: url, isSheet: isSheet)
         }
     }
     
     struct TitleBar: View {
         public var url: URL
+        public var isSheet: Bool
         var body: some View {
             VStack {
                 HStack(alignment: .center) {
                     let isHTTPS = url.scheme == "https"
                     Label(url.host() ?? url.absoluteString, systemImage: isHTTPS ? "lock" : "lock.slash")
                         .padding(.bottom, 10)
+                        .padding(.top, isSheet ? 10 : 0)
                         .foregroundColor(isHTTPS ? Color(UIColor.systemGreen) : Color(UIColor.systemRed))
                 }
                 .frame(maxWidth: .infinity)
@@ -78,4 +85,17 @@ struct FancyWebView: View {
 
 #Preview {
     FancyWebView(url: .init(string: "https://google.com")!)
+}
+
+fileprivate struct BruhView: View {
+    var body: some View {
+        Text("Bruh")
+    }
+}
+
+#Preview {
+    BruhView()
+        .sheet(isPresented: .constant(true), content: {
+            FancyWebView(url: .init(string: "https://google.com")!, isSheet: true)
+        })
 }
